@@ -10,6 +10,8 @@
  	
 
 <?php
+  if(!isset($_SESSION['login_id']))
+    header('location:login.php');
  include('./header.php'); 
  // include('./auth.php'); 
  ?>
@@ -18,14 +20,7 @@
 <style>
 	body{
         background: #80808045;
-        position: fixed;
-        width: calc(100%);
-        height: calc(100%);
-        overflow: auto;
   }
-    main#view-panel {
-        height: calc(100% - 4em);
-    }
   .modal-dialog.large {
     width: 80% !important;
     max-width: unset;
@@ -62,13 +57,11 @@
     max-height: calc(100%);
     max-width: calc(100%);
   }
-  main#view-panel {
-     margin-left: inherit; 
-    width: calc(100%);
 </style>
 
 <body>
 	<?php include 'topbar.php' ?>
+	<?php include 'navbar.php' ?>
   <div class="toast" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body text-white">
     </div>
@@ -76,7 +69,9 @@
   
   <main id="view-panel" >
       <?php $page = isset($_GET['page']) ? $_GET['page'] :'home'; ?>
-      <?php include $page.'.php' ?>
+  	<?php include $page.'.php' ?>
+  	
+
   </main>
 
   <div id="preloader"></div>
@@ -99,13 +94,10 @@
     </div>
   </div>
   <div class="modal fade" id="uni_modal" role='dialog'>
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title"></h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
       <div class="modal-body">
       </div>
@@ -154,12 +146,10 @@
           end_load()  
 
 }
-  window.uni_modal = function($title = '' , $url='',$size="",$params = {}){
+  window.uni_modal = function($title = '' , $url='',$size=""){
     start_load()
     $.ajax({
         url:$url,
-        method:'POST',
-        data:$params,
         error:err=>{
             console.log()
             alert("An error occured")
@@ -171,7 +161,7 @@
                 if($size != ''){
                     $('#uni_modal .modal-dialog').addClass($size)
                 }else{
-                    $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-dialog-centered modal-md")
+                    $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-md")
                 }
                 $('#uni_modal').modal({
                   show:true,
